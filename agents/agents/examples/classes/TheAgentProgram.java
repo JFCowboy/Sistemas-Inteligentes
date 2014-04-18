@@ -1,0 +1,416 @@
+import unalcol.agents.examples.labyrinth.teseo.simple.*;
+import unalcol.agents.*;
+import unalcol.agents.examples.labyrinth.teseo.*;
+import java.util.*;
+public class TheAgentProgram extends SimpleTeseoAgentProgram{
+
+static class Node {
+    public static int NORTH = 0;
+    public static int EAST  = 1;
+    public static int SOUTH = 2;
+    public static int WEST  = 3;
+    //Direccion actual del agente (a donde esta mirando el angente en ese momento)
+    //Se deberia cambiar cada vez que explora un nuevo hijo, o crear una nueva variable
+    private int dir;
+    private int x, y        //Coordenadas relativas del nodo
+                , muro      //Verifica los movs que puede hacer
+                , nHijo;    //numero de hijos del nodo
+    private Vector<Node> hijos;     //Hijos del nodo
+    private Vector<String> caminos; //Path del nodo a sus hijos
+
+    public Node() {
+        hijos = new Vector<Node>();
+        caminos = new Vector<String>();
+        x = 0;
+        y = 0;
+        muro = 0;
+        dir = NORTH;
+    }
+
+    public Node( int nHijo ) {
+        this();
+        this.nHijo = nHijo;
+        for( int i = 0 ; i < nHijo ; i++ ){
+            hijos.add(null);
+            caminos.add("");
+        }
+    }
+    
+    /**
+     * Constructor cuando se conoce el maximo numero de Hijos
+     * @param x
+     * @param y
+     * @param dir
+     * @param nHijo 
+     */
+    public Node(int x, int y, int dir, int nHijo) {
+        this( nHijo );
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+    }
+    
+    public Node(int x, int y, int dir) {
+        this( x, y, dir, 0 );
+    }
+    
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+
+    public void setDir(int dir) {
+        this.dir = dir;
+    }
+
+    public int getMuro() {
+        return muro;
+    }
+
+    public void setMuro(int muro) {
+        this.muro = muro;
+    }
+
+    public Vector<Node> getHijos() {
+        return hijos;
+    }
+
+    public void setHijos( Vector<Node> hijos ) {
+        this.hijos = hijos;
+    }
+    
+    /**
+     * Agrega o remplaza el nodo ubicado en la posicion dirNC
+     * @param hijo
+     * @param dirNC 
+     */
+    public void addHijo( Node nodo, int dirNC ) {
+        //direccion nueva coneccion
+        //dirNC = getGlobalOrientation( dirNC );
+        
+        if( hijos.get( dirNC ) == null )
+            hijos.set(dirNC,  nodo );
+    }
+
+//    private int getGlobalOrientation(int dirNC) {
+//        return ( dir + dirNC )%nHijo;
+//    }
+    
+    /**
+     * Marca el bit en la posicion indice, en un principio siempre va a ser uno
+     * @param idx
+     * @param val 
+     */
+    public void checkMuro( int idx, int val ){
+        
+        //System.out.println("ACA: "+idx+" "+val);
+        //idx = getGlobalOrientation(idx);
+        muro |= (val<<idx);
+    }
+
+    /**
+     * revisa si se puede mover hacia la posicion bit
+     * @param bit
+     * @return 
+     */
+    boolean canMove(int bit ) {
+        //bit = getGlobalOrientation(bit);
+        int aux = (muro & (1<<bit));
+        System.out.println("***");
+        return aux!=0;
+    }
+    
+    /**
+     * desmarca el bit de muro en la posicion bit
+     * @param bit 
+     */
+    
+    public void unCheckMuro( int bit ){
+        //Limpiar Bit
+        muro &= ~(1 << bit);
+    }
+    
+}
+
+protected Stack<StringBuilder> edge;
+    private Node node;
+    private StringBuilder path;
+    private int posX;
+    private int posY;
+    Map<Integer, Map<Integer, Node>> map;
+    private int dir;
+    private static int movX[] = {-1, 0, 1, 0};
+    private static int movY[] = {0, 1, 0, -1};
+    private String aux;
+    private int index;
+    private int estado;
+    
+
+
+    public void init() {
+ node = null;
+
+        posX = 0;
+        posY = 0;
+        map = new TreeMap<Integer, Map<Integer, Node>>();
+        edge = new Stack<StringBuilder>();
+        estado = 0;
+        index = 0;
+        path = new StringBuilder("FIN");
+    }
+
+    @Override
+    public int accion(boolean PF, boolean PD, boolean PA, boolean PI, boolean MT) {
+        
+        if(estado == 1){
+            return goBack();
+        }
+
+        System.out.println("Posicion: " + posX + " " + posY);
+
+        int k, bitAux, nOpen, tam, kaux;
+        Node temp;
+        boolean percepts[] = {PF, PD, PA, PI, MT};
+
+        bitAux = nOpen = 0;
+        tam = percepts.length;
+        if(percepts[4] == true){
+            System.out.println("Termineee :3!!!!");
+            return 10;
+        }
+        for (k = 0; k < tam; k++) {
+            if (k < tam - 1 && !percepts[k]) {
+                nOpen++;
+                kaux = getGlobalOrientation(k);
+                bitAux |= (1 << kaux);
+                
+            }
+        }
+
+        System.out.println("caminos disponibles: " + nOpen);
+        if (map.containsKey(posX) && map.get(posX).containsKey(posY)) {
+            //Obtener el nodo de esta posicion
+            temp = map.get(posX).get(posY);
+            //Marcar camino desde donde se llego
+            temp.unCheckMuro((dir + 2) % 4);
+
+            System.out.println("Nodo Recuperado: " + posX + " " + posY + " " + temp.getMuro());
+            for (k = 0; k < percepts.length - 1; k++) {
+                kaux = getGlobalOrientation(k);
+                if (!percepts[k] && temp.canMove(kaux)) {
+                    break;
+                }
+            }
+
+            if (!path.toString().equals("")) {
+                edge.add(path);
+
+                path = new StringBuilder("");
+            }
+
+            if (k < 4) {
+//                    if( !path.toString().equals("") )
+//                        edge.add( path );
+//                    
+//                    path = new StringBuilder("");
+                kaux = getGlobalOrientation(k);
+                temp.unCheckMuro(kaux);
+                posX = (posX + movX[ (dir + k) % 4]);
+                posY = (posY + movY[ (dir + k) % 4]);
+                dir = (dir + k) % 4;
+                path.append(dir);
+                return k;
+
+            } else {
+                StringBuilder sb = edge.pop();
+                if (sb.toString().equals("FIN")) {
+                    //cmd.add(language.getAction(0));
+                    edge.push(sb);
+                    return 10;
+                } else {
+                    estado = 1;
+                    index = 0;
+                    aux = (sb.reverse().toString());
+                    path = new StringBuilder("");
+                    return goBack();
+                }
+            }
+
+        } else if (nOpen > 2 || node == null) {
+
+            temp = new Node(posX, posY, dir, 4);
+            System.out.println("Nodo creado: " + posX + " " + posY + " " + bitAux);
+            edge.push(path);
+            path = new StringBuilder("");
+            //Si hay nodo Raiz
+            //relacionar el nodo con el que tenia antes
+            if (node != null) {
+                //La ultima direccion que tomo node
+                kaux = getGlobalOrientation(dir);
+                node.addHijo(temp, node.getDir());
+                temp.addHijo(node, kaux);
+                //Marcar desde donde llego
+                bitAux &= ~(1 << ((dir + 2) % 4));
+                System.out.println("ACA BITAUX" + bitAux);
+            }
+
+            if (!map.containsKey(posX)) {
+                map.put(posX, new TreeMap<Integer, Node>());
+            }
+
+            if (!map.get(posX).containsKey(posY)) {
+                map.get(posX).put(posY, temp);
+            }
+
+            node = temp;
+            //Marcamos donde puede o no moverse
+            node.setMuro(bitAux);
+
+            for (k = 0; k < percepts.length - 1; k++) {
+                if (!percepts[k]) {
+                    break;
+                }
+            }
+
+            //Este ya esta transformado
+            node.unCheckMuro(getGlobalOrientation(k));
+            System.out.println("ACA");
+//            mov(k);
+            posX = (posX + movX[ (dir + k) % 4]);
+            posY = (posY + movY[ (dir + k) % 4]);
+            dir = (dir + k) % 4;
+            path.append(dir);
+            return k;
+
+        } else {
+
+            //Verificar a donde nos podemos mover
+            //Usar LB para saber q camino coger
+            //bitAux &= ~(1 << ( 2 ) );
+            bitAux &= ~(1 << ((dir + 2) % 4));
+            System.out.println("***ACA" + bitAux);
+            for (k = 0; k < percepts.length - 1; k++) {
+                kaux = getGlobalOrientation(k);
+                if (!percepts[k] && (bitAux & (1 << kaux)) != 0) {
+                    break;
+                }
+            }
+
+            if (k >= 0 && k < 4) {
+                posX = (posX + movX[ (dir + k) % 4 ]);
+                posY = (posY + movY[ (dir + k) % 4 ]);
+                dir = (dir + k) % 4;
+                path.append(dir);
+                return k;
+            } else {
+                //Segundo caso donde se devuelve
+                index = 0;
+                estado = 1;
+                aux = path.reverse().toString();
+                path = new StringBuilder("");
+                
+                return goBack();
+            }
+        }
+
+    }
+
+    public Stack<StringBuilder> getEdge() {
+        return edge;
+    }
+
+    public void setEdge(Stack<StringBuilder> edge) {
+        this.edge = edge;
+    }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
+
+    public StringBuilder getPath() {
+        return path;
+    }
+
+    public void setPath(StringBuilder path) {
+        this.path = path;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public Map<Integer, Map<Integer, Node>> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<Integer, Map<Integer, Node>> map) {
+        this.map = map;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+
+    public void setDir(int dir) {
+        this.dir = dir;
+    }
+
+    private int getGlobalOrientation(int dirNC) {
+        return (dir + dirNC) % 4;
+    }
+    
+    private int  goBack( ) {
+        
+        
+            int aux2 = aux.charAt(index) - '0';
+            
+            aux2  = (aux2 + 2) % 4;
+            System.out.print("AUX:"+aux);
+            //calcular giro respecto a direccion actual
+            aux2 = ( aux2 - dir + 4 ) % 4;
+            index++;
+            
+            if(index == aux.length())
+                estado = 0;
+            
+            posX = (posX + movX[ (dir + aux2) % 4 ]);
+            posY = (posY + movY[ (dir + aux2) % 4 ]);
+            dir = (dir + aux2) % 4;
+            
+            System.out.println(", AUXF:"+aux);
+            return aux2;
+        System.out.println("D: "+cmd.size() );
+    }
+
+}

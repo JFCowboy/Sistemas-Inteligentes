@@ -1,0 +1,9 @@
+  public int hello;
+  public int accion( boolean PF, boolean PD, boolean PA, boolean PI, boolean MT ){
+     int dir = ((int)(100*Math.random()))%4;
+     while( (dir==0 && PF) || (dir==1 && PD) || (dir==2 && PA) || (dir==3 && PI) ){
+        dir = ((int)(100*Math.random()))%4;
+     };
+    System.out.println( " DIR-> "+dir );
+     return dir;
+  }

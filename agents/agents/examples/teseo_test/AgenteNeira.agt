@@ -1,0 +1,192 @@
+  static class Nodo{
+     public int x;
+     public int y;
+     public int dir;
+     public  boolean[] vecinos;
+     Nodo padre;
+     
+     public Nodo(int x, int y, int dir){
+          this.x = x;
+          this.y = y;
+          this.dir = dir;
+          vecinos = new boolean[4];
+     }     
+
+     public Nodo(int x, int y, int dir, Nodo padre){
+          this.x = x;
+          this.y = y;
+          this.dir = dir;
+          this.padre = padre;
+          vecinos = new boolean[4];
+     }     
+}
+
+  public int dir = 0; 		
+  public int MAX = 10000;
+  public String[] acciones = new String[MAX];
+  public int idPila = 0;
+  public int idAccion = 0;
+  public HashMap<Integer, HashMap<Integer, Nodo>> v = new HashMap<>();
+  public boolean regresa = false;
+  public static Nodo actual ;
+  public boolean llegamos=false;
+  int X=0; int Y=0;
+
+
+public void transform(int i){
+      dir = (dir + i ) % 4;      
+}
+
+public void actualizar(){
+     if(dir==0)  Y++;
+     if(dir==1)  X++;     
+     if(dir==2)  Y--;
+     if(dir==3)  X--;
+}
+
+  public int accion( boolean PF, boolean PD, boolean PA, boolean PI, boolean MT ){
+    
+     if(MT)  return 4;
+     boolean sense[] = new boolean[4];
+     sense[0] = PF;
+     sense[1] = PD;
+     sense[2] = PA;
+     sense[3] = PI;
+
+     if(regresa==true){
+          if(idAccion == 0) {
+               regresa = false;
+              // idPila--;
+              acciones[idPila]="";
+               actual.vecinos[(dir+2)%4] = false;
+               for(int i =0; i<4; i++){
+                    if(actual.vecinos[i]){
+                         int mov = (dir%2==0)?(dir+i)%4:(((dir+2)%4)+i)%4;
+                         acciones[idPila]+=""+mov;
+                         transform(mov);
+                         actualizar();
+                         return mov;
+                      }            
+               }
+               idPila--;
+               int mov = (dir%2==0)?(dir+(actual.dir+2)%4)%4:(((dir+2)%4)+(actual.dir+2)%4)%4;
+               transform(mov);
+               actualizar();
+               actual = actual.padre;
+               return mov;               
+          }
+          int d = acciones[idPila].charAt(idAccion--)-'0';
+          if(d==0) {               
+               actualizar();
+               return 0;
+           }
+          if(d==1) {
+               transform(3);
+               actualizar();
+               return 3;
+          }
+           if(d==3) {
+               transform(1);
+               actualizar();
+               return 1;
+          }
+     }
+
+     System.out.println(dir+"--> ("+X+","+Y+")");
+     if(acciones[0] == null) {	
+          acciones[0] = "";
+          actual = new Nodo(0,0,0);
+          v.put(0, new HashMap<Integer, Nodo>());
+          v.get(0).put(0, actual);
+          if(!PF)  actual.vecinos[0] = true;
+          if(!PD) actual.vecinos[1] = true;
+          if(!PA)  actual.vecinos[2] = true;
+          if(!PI)   actual.vecinos[3] = true;
+          for(int i =0; i<4; i++){
+            if(actual.vecinos[i]){
+                  acciones[idPila]+=""+i;
+                  transform(i);
+                  actualizar();
+                  return i;
+            }            
+         }
+      }
+
+      else{          
+           int count = 0;
+           if( !PF)  count++;
+           if( !PD) count++;
+           if( !PA)  count++;
+           if( !PI)   count++;
+
+           if(count==1){
+                  regresa = true;
+                  idAccion = acciones[idPila].length()-1;
+                  transform(2);
+                  actualizar();
+                  return 2;                                    
+           }
+
+            if(count == 2) {
+                  if(!sense[0]){         
+                        acciones[idPila]+="0";
+                       actualizar();
+                        return 0;    
+                  }
+                  if(!sense[1]){                      
+                        acciones[idPila]+="1";
+                        transform(1);
+                       actualizar();
+                        return 1;    
+                  }
+                  if(!sense[3]){                 
+                        acciones[idPila]+="3";     
+                        transform(3);
+                        actualizar();
+                        return 3;    
+                  }
+            }      
+
+
+            if(count >= 3) {
+                       if(!v.containsKey(X)  || !v.get(X).containsKey(Y)){
+                                   System.out.println("SE CREO UN NODO ("+X+","+Y+")");
+                                    Nodo nuevo = new Nodo(X,Y,dir,actual);
+                                    if(!v.containsKey(X))  v.put(X, new HashMap<Integer, Nodo>());          
+                                    v.get(X).put(Y,nuevo);
+                                    idPila++;
+                                    acciones[idPila] = "";
+                                    actual = nuevo;
+                                    for(int i=0;i<4;i++){
+                                          if(i==(dir+2)%4) continue;
+                                          if(dir%2==0){
+                                               actual.vecinos[i] = !sense[(dir+i)%4];  
+                                          }
+                                          else{
+                                                actual.vecinos[i] = !sense[  ( ((dir+2)%4)+i)%4];
+                                          }
+                                    }
+
+                                    for(int i =0; i<4; i++){
+        	             if(actual.vecinos[i]){
+                                                int mov = (dir%2==0)?(dir+i)%4:(((dir+2)%4)+i)%4;
+	                  acciones[idPila]+=""+mov;
+                                                transform(mov);
+	                  actualizar();
+	                  return mov;
+	            }            
+                                    }
+                        }
+                        else{
+                             if(X == actual.x && Y == actual.y) {regresa=true;return 4;}
+                             v.get(X).get(Y).vecinos[(dir+2)%4] = false; 
+                  	regresa = true;
+               	idAccion = acciones[idPila].length()-1;
+                	transform(2);
+	actualizar();
+	return 2;
+                        } 
+             }    
+          }
+      return 0;
+      }
