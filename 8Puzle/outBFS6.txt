@@ -1,0 +1,93 @@
+Case 0:
+ Sol: 31
+ Time: 16209 milisegundos
+Case 1:
+ Sol: 7
+ Time: 17 milisegundos
+Case 2:
+ Sol: 7
+ Time: 17 milisegundos
+Case 3:
+ Sol: 12
+ Time: 191 milisegundos
+Case 4:
+ Sol: 27
+ Time: 15517 milisegundos
+Case 5:
+ Sol: 27
+ Time: 15014 milisegundos
+Case 6:
+ Sol: 7
+ Time: 18 milisegundos
+Case 7:
+ Sol: 22
+ Time: 9178 milisegundos
+Case 8:
+ Sol: 12
+ Time: 147 milisegundos
+Case 9:
+ Sol: 6
+ Time: 9 milisegundos
+Case 10:
+ Sol: 8
+ Time: 18 milisegundos
+Case 11:
+ Sol: 7
+ Time: 18 milisegundos
+Case 12:
+ Sol: 7
+ Time: 17 milisegundos
+Case 13:
+ Sol: 27
+ Time: 15430 milisegundos
+Case 14:
+ Sol: 27
+ Time: 15414 milisegundos
+Case 15:
+ Sol: 4
+ Time: 3 milisegundos
+Case 16:
+ Sol: 19
+ Time: 4074 milisegundos
+Case 17:
+ Sol: 4
+ Time: 2 milisegundos
+Case 18:
+ Sol: 8
+ Time: 19 milisegundos
+Case 19:
+ Sol: 5
+ Time: 6 milisegundos
+Case 20:
+ Sol: 24
+ Time: 11674 milisegundos
+Case 21:
+ Sol: 26
+ Time: 14353 milisegundos
+Case 22:
+ Sol: 6
+ Time: 11 milisegundos
+Case 23:
+ Sol: 2
+ Time: 1 milisegundos
+Case 24:
+ Sol: 26
+ Time: 14729 milisegundos
+Case 25:
+ Sol: 4
+ Time: 6 milisegundos
+Case 26:
+ Sol: 7
+ Time: 18 milisegundos
+Case 27:
+ Sol: 10
+ Time: 89 milisegundos
+Case 28:
+ Sol: 30
+ Time: 16565 milisegundos
+Case 29:
+ Sol: 27
+ Time: 16388 milisegundos
+Case 30:
+ Sol: 28
+ Time: 16095 milisegundos
