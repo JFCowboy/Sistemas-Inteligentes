@@ -44,6 +44,7 @@ struct Board{
         id = state;
         return state;
     }
+
     //De matriz a numero
     long long toID( int p[3][3] ){
         long long state = 0;
@@ -216,7 +217,7 @@ int main( ){
     clock_t t_ini, t_fin;
     double secs;
     freopen("input.txt","r",stdin);
-    freopen("outIDFS6.txt","w",stdout);
+    freopen("outIDFS2.txt","w",stdout);
     for(int t, k = 0; cin>>t ; k++){
         int aux1[3][3];
         aux1[0][0]=t-1;

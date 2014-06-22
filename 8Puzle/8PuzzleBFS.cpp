@@ -112,7 +112,7 @@ int main(){
     //freopen("input1.txt","w",stdout);
 
     freopen("input.txt","r",stdin);
-    freopen("outBFS5.txt","w",stdout);
+    freopen("outBFS2.txt","w",stdout);
     clock_t t_ini, t_fin;
     double secs;
     cuadro c(fact[9]-1);

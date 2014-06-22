@@ -212,7 +212,7 @@ int main( ){
     clock_t t_ini, t_fin;
     double secs;
     freopen("input.txt","r",stdin);
-    freopen("outDFS6.txt","w",stdout);
+    freopen("outDFS2.txt","w",stdout);
 
     for(int t, k = 0; cin>>t ; k++){
         int aux1[3][3];
