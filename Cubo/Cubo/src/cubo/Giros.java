@@ -1,13 +1,8 @@
 package cubo;
-
 import java.util.ArrayList;
 
-/**
- *
- * @author Estudiantes
- */
 public class Giros {
-
+ 
     /**
      * Gira el cubo segun la direccion que se elija <p/>* 0 cara de arriba a la
      * Derecha <p/>* 1 cara de arriba a la Izquierda <p/>* 2 cara de abajo a la Derecha
@@ -23,6 +18,7 @@ public class Giros {
      */
     public ArrayList<int[][]> girar(ArrayList<int[][]> actual, int dir) {
         //Puede ser mejor devolver el arreglo original si la direccion no es valida
+        //System.out.println("ACA "+ dir);
         ArrayList<int[][]> ret = null;
         switch (dir) {
             case 0:
@@ -62,10 +58,10 @@ public class Giros {
                 ret = F_A(actual, "atras", -1);
                 break;
         }
-
+ 
         return ret;
     }
-
+ 
     public static ArrayList<int[][]> AR_AB(ArrayList<int[][]> actual, String op, int dir) {
         ArrayList<int[][]> nuevo = copia(actual);
         int fila = (op.equals("arriba")) ? 0 : 2;
@@ -134,9 +130,10 @@ public class Giros {
         }
         return nuevo;
     }
-
+ 
     public static ArrayList<int[][]> LD_LI(ArrayList<int[][]> actual, String op, int dir) {
         ArrayList<int[][]> nuevo = copia(actual);
+        //System.out.println("ACA2 " +op+" "+dir);
         int col = (op.equals("derecha")) ? 2 : 0;
         // FRENTE
         int id = (dir == 1) ? 3 : 1;
@@ -155,10 +152,10 @@ public class Giros {
         nuevo.get(2)[2][(col + 2) % 4] = actual.get(id)[0][col];
         // ABAJO
         id = (dir == 1) ? 2 : 0;
-        //System.out.println("->>>"+dir+" "+id);
-        nuevo.get(3)[0][col] = (id == 2) ? actual.get(id)[2][(col + 2) % 2] : actual.get(id)[0][col];
-        nuevo.get(3)[1][col] = (id == 2) ? actual.get(id)[1][(col + 2) % 2] : actual.get(id)[1][col];
-        nuevo.get(3)[2][col] = (id == 2) ? actual.get(id)[0][(col + 2) % 2] : actual.get(id)[2][col];;
+        //System.out.println("->>>>"+id+" "+dir+" "+col);
+        nuevo.get(3)[0][col] = (id == 2) ? actual.get(id)[2][(col + 2) % 4] : actual.get(id)[0][col];
+        nuevo.get(3)[1][col] = (id == 2) ? actual.get(id)[1][(col + 2) % 4] : actual.get(id)[1][col];
+        nuevo.get(3)[2][col] = (id == 2) ? actual.get(id)[0][(col + 2) % 4] : actual.get(id)[2][col];
         // LADOS
         int cara = (op.equals("derecha")) ? 4 : 5;
         if ((dir == 1 && cara == 4) || (dir == -1 && cara == 5)) {
@@ -183,7 +180,7 @@ public class Giros {
         }
         return nuevo;
     }
-
+ 
     public static ArrayList<int[][]> F_A(ArrayList<int[][]> actual, String op, int dir) {
         ArrayList<int[][]> nuevo = copia(actual);
         int fila = (op.equals("frente")) ? 2 : 0;
@@ -204,10 +201,12 @@ public class Giros {
         nuevo.get(4)[2][(fila + 2) % 4] = (id == 1) ? actual.get(id)[fila][2] : actual.get(id)[(fila + 2) % 4][0];
         // IZQUIERDA
         id = (dir == 1) ? 3 : 1;
+         
         nuevo.get(5)[0][fila] = (id == 3) ? actual.get(id)[(fila + 2) % 4][0] : actual.get(id)[fila][2];
         nuevo.get(5)[1][fila] = (id == 3) ? actual.get(id)[(fila + 2) % 4][1] : actual.get(id)[fila][1];
         nuevo.get(5)[2][fila] = (id == 3) ? actual.get(id)[(fila + 2) % 4][2] : actual.get(id)[fila][0];
         // FRENTE/ATRAS
+        //System.out.println("->>>>"+dir+" "+id);
         int cara = (op.equals("frente")) ? 0 : 2;
         if ((dir == 1 && cara == 0) || (dir == -1 && cara == 2)) {
             nuevo.get(cara)[0][0] = actual.get(cara)[2][0];
@@ -231,7 +230,7 @@ public class Giros {
         }
         return nuevo;
     }
-
+ 
     public static ArrayList<int[][]> copia(ArrayList<int[][]> actual) {
         ArrayList<int[][]> nuevo = new ArrayList<>();
         for (int i = 0; i < 6; i++) {

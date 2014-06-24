@@ -23,23 +23,31 @@ public class GenerarCasos {
             }
             finall.add(cara);
         }       
-        String color = "RBOGYW";
-        Cubo cubo = new Cubo( finall , color);
+        String color = "RBOGYW";//"012345";
+        Cubo cubo = new Cubo( finall , color, 0);
         System.out.println("***\n"+cubo);
         
-        int nGiros = 7;
-        int moves[] = {0,4,5,6,4,0,0};
+        //Generar los diferentes giros que se le aplicaran al cubo
+        int nGiros = 30;
+        int moves[] = new int[nGiros];
+        Random ran = new Random();
+        
+        for(int i = 0 ; i < nGiros ; i++){
+            moves[ i ] =  ran.nextInt(12);
+        }
+        
         Giros mano = new Giros();
         
         for(int i=0; i<nGiros; i++){
             int giro = moves[i];
-            System.out.println("Se hizo un giro "+giro);
+            //System.out.println("Se hizo un giro "+giro);
             finall = mano.girar(cubo.getCubo(), giro);
-            Cubo cuboAux = new Cubo( finall, color );
+            Cubo cuboAux = new Cubo( finall, color, cubo.dist+1 );
             cubo = cuboAux;
-            System.out.println("******************"+cubo);
+            //System.out.println("******************"+cubo);
             
         }
+        System.out.println(cubo);
         
     }   
 }
