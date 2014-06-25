@@ -10,7 +10,7 @@ class Tablero {
 
     static final int movX[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     static final int movY[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-    int tablero[][];
+    int[][] t;
     int tam;
     ArrayList<Integer> posicionBlancas;
     ArrayList<Integer> posicionNegras;
@@ -20,7 +20,7 @@ class Tablero {
     }
 
     public Tablero(int[][] tablero, int tam) {
-        this.tablero = tablero;
+        this.t = tablero;
         this.tam = tam;
         posicionBlancas = new ArrayList<>();
         posicionNegras = new ArrayList<>();
@@ -31,10 +31,10 @@ class Tablero {
         posicionNegras.clear();
         for (int i = 0; i < tam; i++) {
             for (int j = 0; j < tam; j++) {
-                if (tablero[i][j] == 1) {
+                if (t[i][j] == 1) {
                     posicionBlancas.add(i);
                     posicionBlancas.add(j);
-                } else if (tablero[i][j] == -1) {
+                } else if (t[i][j] == -1) {
                     posicionNegras.add(i);
                     posicionNegras.add(j);
                 }
@@ -92,13 +92,13 @@ class Tablero {
         xo = x;
         yo = y;
         
-        while (isValid(x, y) && tablero[x][y] == -color) {
+        while (isValid(x, y) && t[x][y] == -color) {
             x += movx;
             y += movy;
             z = 1;
         }
         
-        if (isValid(x, y) && tablero[x][y] == 0 && z == 1) {
+        if (isValid(x, y) && t[x][y] == 0 && z == 1) {
             ret[0] = 1;
             ret[1] = x;
             ret[2] = y;
@@ -117,7 +117,7 @@ class Tablero {
         sb.append("\n\n***\n");
         for (int i = 0; i < tam; i++) {
             for (int j = 0; j < tam; j++) {
-                sb.append("|" + tablero[i][j] + "|");
+                sb.append("|" + t[i][j] + "|");
             }
             sb.append("\n");
         }

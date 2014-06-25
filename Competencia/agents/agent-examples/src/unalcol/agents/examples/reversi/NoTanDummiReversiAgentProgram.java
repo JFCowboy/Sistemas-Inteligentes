@@ -11,7 +11,7 @@ import unalcol.agents.Percept;
  *
  * @author JuanFelipe
  */
-public class AgenteReversiPerla implements AgentProgram {
+public class NoTanDummiReversiAgentProgram implements AgentProgram {
 
     protected String color;
     protected int tam;
@@ -19,7 +19,7 @@ public class AgenteReversiPerla implements AgentProgram {
     protected Tablero tablero;
     Map<String, Integer> valor = new HashMap<>();
 
-    public AgenteReversiPerla(String color) {
+    public NoTanDummiReversiAgentProgram(String color) {
         this.color = color;
         valor.put("space", 0);
         valor.put("white", 1);
@@ -59,7 +59,7 @@ public class AgenteReversiPerla implements AgentProgram {
             for (int j = 0; j < tam; j++) {
                 pos = i + ":" + j;
                 casilla = p.getAttribute(pos).toString();
-                tablero.tablero[i][j] = valor.get(casilla);
+                tablero.t[i][j] = valor.get(casilla);
             }
         }
     }

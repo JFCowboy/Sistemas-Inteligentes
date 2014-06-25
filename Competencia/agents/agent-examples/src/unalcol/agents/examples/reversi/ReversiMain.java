@@ -17,9 +17,9 @@ public class ReversiMain {
   public static void main( String[] argv ){
     // Reflection
     ServiceProvider provider = ReflectUtil.getProvider("services/");
-    Agent w_agent = new Agent( new AgenteReversiPerla( Reversi.WHITE ) );
+    Agent w_agent = new Agent( new NoTanDummiReversiAgentProgram( Reversi.WHITE ) );
     //Agent w_agent = new Agent( new DummyReversiAgentProgram(Reversi.WHITE) );
-    Agent b_agent = new Agent( new AgenteReversiPerla( Reversi.BLACK ) );
+    Agent b_agent = new Agent( new NoTanDummiReversiAgentProgram( Reversi.BLACK ) );
     //Agent b_agent = new Agent( new DummyReversiAgentProgram(Reversi.BLACK) );
     //ReversiMainFrame frame = new ReversiMainFrame( w_agent, b_agent );
     ReversiMainFrame frame = new ReversiMainFrame( w_agent, b_agent );
