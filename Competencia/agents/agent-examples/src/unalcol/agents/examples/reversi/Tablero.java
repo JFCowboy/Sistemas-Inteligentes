@@ -102,13 +102,8 @@ class Tablero {
             ret[0] = 1;
             ret[1] = x;
             ret[2] = y;
-//            System.out.println("x:"+x+" y:"+y+" tablero:"+tablero[x][y]);
-//            System.out.println("x:"+x+" y:"+y+" xo:"+xo+" yo:"+yo);
-//            if( x==1 && y==3){
-//                System.out.println("ACA COLOR "+color);
-//                print();
-//            }
         }
+        
         z = 0;
         return ret;
     }

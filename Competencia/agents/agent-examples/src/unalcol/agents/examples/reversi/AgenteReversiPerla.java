@@ -35,22 +35,14 @@ public class AgenteReversiPerla implements AgentProgram {
             tablero = new Tablero(tam);
         }
 
-        if (p.getAttribute(Reversi.TURN).equals(color)) {   
-            leerTablero(p);
-                     
-            System.out.println(tablero.print());
-            tablero.identificarFichas();
-            ArrayList<Integer> posibleMov = tablero.movimientos(color);
-            int idx = 0;
-//            System.out.println("POSIBLES MOV");
-//            for (Integer num : posibleMov) {
-//                if( (idx%2) == 0 )
-//                    System.out.print("x "+num);
-//                else
-//                    System.out.println(" y "+num);
-//                idx++;
-//            }
-//            System.out.println("FIN POSIBLES MOV");
+        if (p.getAttribute(Reversi.TURN).equals(color)) {
+            leerTablero(p);                                                     // Lee el tablero actual
+            tablero.identificarFichas();                                        // Identifica posiciones fichas negras y blancas
+            ArrayList<Integer> posibleMov = tablero.movimientos(color);         // Movimientos válidos a partir de mis posiciones actuales        
+            // No se puede ejecutar movimiento alguno, pasa turno
+            if (posibleMov.size() == 0) {
+                return new Action(Reversi.PASS);
+            }
             System.out.println("Movimiento:" + color);
             System.out.println("->X:" + posibleMov.get(0) + " Y:" + posibleMov.get(1));
             System.out.println("--------------------------");
