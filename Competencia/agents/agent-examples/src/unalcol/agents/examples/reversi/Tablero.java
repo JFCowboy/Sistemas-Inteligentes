@@ -27,6 +27,8 @@ class Tablero {
     }
 
     public void identificarFichas() {
+        posicionBlancas.clear();
+        posicionNegras.clear();
         for (int i = 0; i < tam; i++) {
             for (int j = 0; j < tam; j++) {
                 if (tablero[i][j] == 1) {
@@ -56,7 +58,6 @@ class Tablero {
             x = posiciones.get(i);
             y = posiciones.get(i + 1);
             for (int idx = 0; idx < 8; idx++) {
-                System.out.println("Manda:" + x + " " + y + " " + colorS);
                 posMov = mov(x + movX[idx], y + movY[idx], movX[idx], movY[idx], color);
                 if (posMov[0] == 1) {
                     movimientos.add(posMov[1]);
@@ -90,16 +91,13 @@ class Tablero {
         int xo, yo;
         xo = x;
         yo = y;
+        
         while (isValid(x, y) && tablero[x][y] == -color) {
             x += movx;
             y += movy;
             z = 1;
         }
-        if (x == 1 && y == 3 && color == 1) {
-            System.out.println("ACA TABLERO" + x + " " + y + " " + xo + " " + yo);
-            System.out.println(print());
-            System.out.println("FIN TABLERO" + x + " " + y + " " + xo + " " + yo);
-        }
+        
         if (isValid(x, y) && tablero[x][y] == 0 && z == 1) {
             ret[0] = 1;
             ret[1] = x;
