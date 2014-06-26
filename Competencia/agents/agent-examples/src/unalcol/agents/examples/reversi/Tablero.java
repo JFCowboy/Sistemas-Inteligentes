@@ -96,7 +96,8 @@ class Tablero {
     
     Tablero makeMove(Move m, String color) {
         int[][] tablero = makeCopy();
-        flipCoins(tablero, m, (color.equals(Reversi.WHITE))?1:-1);
+        //flipCoins(tablero, m, (color.equals(Reversi.WHITE))?1:-1);
+        play(tablero, m, (color.equals(Reversi.WHITE))?1:-1);
         return new Tablero(tablero, tablero.length); 
     }  
     
@@ -121,6 +122,173 @@ class Tablero {
          t[x][y] = v;
      }
 
+    /**
+     * Propuesta para remplazar el flipCoins, 
+     * este evalua todos los posibles cambios
+     * @param t
+     * @param m
+     * @param val
+     * @return 
+     */
+    public boolean play( int[][]t, Move m, int val ){
+        int x = m.desde[0];
+        int y = m.desde[1];
+        if( t[x][y] != 0 ) return false;
+        boolean flag1 = l_play(t, x, y, val);
+        boolean flag2 = u_play(t, x, y, val);
+        boolean flag3 = r_play(t, x, y, val);
+        boolean flag4 = d_play(t, x, y, val);
+        boolean flag5 = lu_play(t, x, y, val);
+        boolean flag6 = ld_play(t, x, y, val);
+        boolean flag7 = ru_play(t, x, y, val);
+        boolean flag8 = rd_play(t, x, y, val);
+        boolean flag = flag1 || flag2 || flag3 || flag4 || flag5 || flag6 || flag7 || flag8;
+        if( flag ){
+            t[x][y] = val;
+        }
+        return flag;
+    }
+    
+    public boolean l_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int j1=j-1;
+        while( j1>=0 && t[i][j1] == nval ){
+            j1--;
+        }
+        if( j1>=0 && j1+1 < j && t[i][j1] == val ){
+            // Valid play
+            for( int k=j1+1; k<j; k++ ){
+                t[i][k] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+
+    public boolean u_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i-1;
+        while( i1>=0 && t[i1][j] == nval ){
+            i1--;
+        }
+        if( i1>=0 && i1+1 < i && t[i1][j] == val ){
+            // Valid play
+            for( int k=i1+1; k<i; k++ ){
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+
+    public boolean r_play(int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int j1=j+1;
+        while( j1<t[0].length && t[i][j1] == nval ){
+            j1++;
+        }
+        if( j1<t[0].length && j+1 < j1 && t[i][j1] == val ){
+            // Valid play
+            for( int k=j+1; k<j1; k++ ){
+                t[i][k] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+
+    public boolean d_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i+1;
+        while( i1<t.length && t[i1][j] == nval ){
+            i1++;
+        }
+        if( i1<t.length && i+1<i1 && t[i1][j] == val ){
+            // Valid play
+            for( int k=i+1; k<i1; k++ ){
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+    
+    public boolean lu_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i-1;
+        int j1=j-1;
+        while( i1>=0 && j1>=0 && t[i1][j1] == nval ){
+            i1--;
+            j1--;
+        }
+        if( i1>=0 && j1>=0 && i1+1 < i && t[i1][j1] == val ){
+            // Valid play
+            for( int k=i1+1; k<i; k++ ){
+                j--;
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+
+    public boolean ru_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i-1;
+        int j1=j+1;
+        while( i1>=0 && j1<t[0].length && t[i1][j1] == nval ){
+            i1--;
+            j1++;
+        }
+        if( i1>=0 && i1+1 < i && j1<t[0].length && t[i1][j1] == val ){
+            // Valid play
+            for( int k=i1+1; k<i; k++ ){
+                j++;
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+
+    public boolean ld_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i+1;
+        int j1=j-1;
+        while( i1<t.length && j1>=0 && t[i1][j1] == nval ){
+            i1++;
+            j1--;
+        }
+        if( i1<t.length && j1>=0 && i+1 < i1 && t[i1][j1] == val ){
+            // Valid play
+            for( int k=i+1; k<i1; k++ ){
+                j--;
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+    
+    public boolean rd_play( int[][]t, int i, int j, int val ){
+        int nval = -val;
+        int i1 = i+1;
+        int j1=j+1;
+        while( i1<t.length && j1<t[0].length && t[i1][j1] == nval ){
+            i1++;
+            j1++;
+        }
+        if( i1<t.length && j1<t[0].length && i+1 < i1 && t[i1][j1] == val ){
+            // Valid play
+            for( int k=i+1; k<i1; k++ ){
+                j++;
+                t[k][j] = val;
+            }
+            return true;
+        }
+        return false;        
+    }
+    
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tam; i++) {
