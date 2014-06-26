@@ -24,7 +24,7 @@ public class DummyReversiAgentProgram implements AgentProgram {
         if( p.getAttribute(Reversi.TURN).equals(color) ){
             int i = (int)(8*Math.random());
             int j = (int)(8*Math.random());
-            System.out.println("DUMMY: "+i+":"+j+":"+color);
+            System.out.println("me movi tontamente a ("+i+","+j+")");
             return new Action( i+":"+j+":"+color );
         }
         

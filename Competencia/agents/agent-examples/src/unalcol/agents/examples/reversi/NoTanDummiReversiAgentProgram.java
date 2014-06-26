@@ -38,15 +38,15 @@ public class NoTanDummiReversiAgentProgram implements AgentProgram {
         if (p.getAttribute(Reversi.TURN).equals(color)) {
             leerTablero(p);                                                     // Lee el tablero actual
             tablero.identificarFichas();                                        // Identifica posiciones fichas negras y blancas
-            ArrayList<Integer> posibleMov = tablero.movimientos(color);         // Movimientos válidos a partir de mis posiciones actuales        
+            ArrayList<Move> posibleMov = tablero.movimientos(color);         // Movimientos válidos a partir de mis posiciones actuales        
             // No se puede ejecutar movimiento alguno, pasa turno
             if (posibleMov.size() == 0) {
                 return new Action(Reversi.PASS);
             }
             System.out.println("Movimiento:" + color);
-            System.out.println("->X:" + posibleMov.get(0) + " Y:" + posibleMov.get(1));
+            System.out.println("->X:" + posibleMov.get(0).hasta[0] + " Y:" + posibleMov.get(0).hasta[1]);
             System.out.println("--------------------------");
-            return new Action(posibleMov.get(0) + ":" + posibleMov.get(1) + ":" + color);
+            return new Action(posibleMov.get(0).hasta[0] + ":" + posibleMov.get(0).hasta[1] + ":" + color);
         }
 
         System.out.println("Stealing turn " + color);
