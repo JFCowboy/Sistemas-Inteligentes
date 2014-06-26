@@ -10,6 +10,7 @@ public class MiniMax {
 
     // turn impar es para jugadas del max
     // retorna indice del movimiento a hacer y su score según la heuristica
+    
     public int[] bestMove(Tablero t, String color, int turn, int K) {
 
         if (turn > K || t.posicionBlancas.size() == 0 || t.posicionNegras.size() == 0) {
