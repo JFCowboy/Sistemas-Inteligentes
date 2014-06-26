@@ -13,11 +13,11 @@ public class MiniMax {
     
     public int[] bestMove(Tablero t, String color, int turn, int K) {
 
-        if (turn > K || t.posicionBlancas.size() == 0 || t.posicionNegras.size() == 0) {
+        if (turn > K || t.posicionBlancas.isEmpty() || t.posicionNegras.isEmpty()) {
             int score = Score(t, color);
             return new int[]{0,score};
-
         }
+        
         ArrayList<Move> moves = t.movimientos(color);
         int best = (turn % 2 == 1) ? 0 : Integer.MAX_VALUE;
         int bestMoveIndex = -1;

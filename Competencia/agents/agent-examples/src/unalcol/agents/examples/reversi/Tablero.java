@@ -97,8 +97,7 @@ class Tablero {
     Tablero makeMove(Move m, String color) {
         int[][] tablero = makeCopy();
         flipCoins(tablero, m, (color.equals(Reversi.WHITE))?1:-1);
-        return new Tablero(tablero, tablero.length);
-        
+        return new Tablero(tablero, tablero.length); 
     }  
     
      private int[][] makeCopy() {

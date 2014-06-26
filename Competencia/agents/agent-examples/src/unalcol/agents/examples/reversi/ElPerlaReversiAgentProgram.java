@@ -40,11 +40,16 @@ public class ElPerlaReversiAgentProgram implements AgentProgram {
             tablero.identificarFichas();                                        // Identifica posiciones fichas negras y blancas
             ArrayList<Move> posibleMov = tablero.movimientos(color);            // Movimientos válidos a partir de mis posiciones actuales        
             // No se puede ejecutar movimiento alguno, pasa turno
-            if (posibleMov.size() == 0) {
+            if ( posibleMov.isEmpty() ) {
                 return new Action(Reversi.PASS);
             }
             int bestMoveIndesx[] = new MiniMax().bestMove(tablero, color, 1, 3);
-            return new Action(posibleMov.get(bestMoveIndesx[0]).hasta[0] + ":" + posibleMov.get(bestMoveIndesx[0]).hasta[1] + ":" + color);
+            //Otras condiciones donde no hay mas jugadas por hacer
+            
+            if( bestMoveIndesx.length>=1 && bestMoveIndesx[0]>=0)
+                return new Action(posibleMov.get(bestMoveIndesx[0]).hasta[0] + ":" + posibleMov.get(bestMoveIndesx[0]).hasta[1] + ":" + color);
+            else
+                return new Action(Reversi.PASS);
         }
 
         System.out.println("Stealing turn " + color);
